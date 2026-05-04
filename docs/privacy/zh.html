@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>隐私政策 — Remote SmartTV</title>
+<meta name="robots" content="index,follow">
+<meta name="description" content="Remote SmartTV 是一款完全本地化的电视遥控应用。我们致力于保护您的隐私，并对应用的运作方式保持透明。">
+<style>
+:root {
+  --bg: #F9FAFB;
+  --card: #FFFFFF;
+  --primary: #2563EB;
+  --primary-bg: rgba(37,99,235,0.10);
+  --text: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --border: #E5E7EB;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F172A;
+    --card: #1E293B;
+    --primary: #60A5FA;
+    --primary-bg: rgba(96,165,250,0.16);
+    --text: #F1F5F9;
+    --text-secondary: #CBD5E1;
+    --text-muted: #64748B;
+    --border: #334155;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+        "Hiragino Sans", "PingFang SC", "Apple SD Gothic Neo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+header .picker {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+header .picker a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-left: 6px;
+}
+header .picker a.current {
+  color: var(--primary);
+  font-weight: 600;
+}
+header .picker a:hover { text-decoration: underline; }
+h1 {
+  font-size: 28px;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.meta {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.app-info {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin: 8px 0 32px;
+}
+.section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.section h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+.section h2 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.section p { margin: 0 0 12px; color: var(--text-secondary); font-size: 14px; }
+.section p:last-child { margin-bottom: 0; }
+.subsection { margin-bottom: 14px; }
+.subsection:last-child { margin-bottom: 0; }
+.subsection h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+ul.bullets { list-style: none; padding: 0; margin: 0; }
+ul.bullets li {
+  position: relative;
+  padding: 0 0 10px 18px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+ul.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+ul.bullets li b {
+  color: var(--text);
+  font-weight: 600;
+}
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 24px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>隐私政策</h1>
+    <div class="picker"><a href="index.html">English</a> · <a href="vi.html">Tiếng Việt</a> · <a href="ja.html">日本語</a> · <a href="ko.html">한국어</a> · <a href="zh.html" class="current">简体中文</a></div>
+  </header>
+  <div class="meta">最后更新：April 29, 2026</div>
+  <p class="app-info">Remote SmartTV 是一款完全本地化的电视遥控应用。我们致力于保护您的隐私，并对应用的运作方式保持透明。</p>
+
+  <section class="section">
+    <h2><span class="num">1</span>我们收集的信息</h2>
+    <p>Remote SmartTV 不会在外部服务器上收集、传输或存储任何个人数据。所有数据——包括电视连接信息、应用设置和 PIN 码——均本地存储在您的设备上，不会离开设备。</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">2</span>信息使用方式</h2>
+    <div class="subsection">
+      <h3>电视控制</h3>
+      <p>电视 IP 地址和配对凭据本地存储用于建立连接，不会与任何第三方共享。</p>
+    </div>    <div class="subsection">
+      <h3>语音搜索</h3>
+      <p>麦克风音频实时直接流式传输到电视，不会被录制、存储或传输到任何服务器。</p>
+    </div>    <div class="subsection">
+      <h3>应用锁</h3>
+      <p>您的 PIN 码通过系统钥匙串安全存储在设备上。生物特征认证使用设备内置系统，应用无法访问生物特征数据。</p>
+    </div>
+  </section>
+  <section class="section">
+    <h2><span class="num">3</span>所需权限</h2>
+    <ul class="bullets"><li><b>本地网络</b> — 需要此权限以发现并连接您 Wi-Fi 网络上的智能电视。</li></ul>    <ul class="bullets"><li><b>麦克风</b> — 仅在语音搜索期间使用。音频直接流式传输到电视。</li></ul>    <ul class="bullets"><li><b>面容 ID / 指纹</b> — 在启用应用锁时用于解锁应用。生物特征数据完全由设备操作系统管理。</li></ul>
+  </section>
+  <section class="section">
+    <h2><span class="num">4</span>数据存储与安全</h2>
+    <p>所有应用数据仅存储在您的设备上。敏感数据（PIN 码、配对密钥）使用系统钥匙串保存。没有数据会传输到我们的服务器。</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">5</span>第三方服务</h2>
+    <p>应用使用 Firebase Crashlytics 和 Firebase Analytics 接收匿名崩溃报告和使用统计数据。这些服务不收集个人可识别信息。</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">6</span>儿童隐私</h2>
+    <p>Remote SmartTV 不会有意收集 13 岁以下儿童的任何信息。应用不需要账户注册或任何个人数据。</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">7</span>政策变更</h2>
+    <p>我们可能会不时更新本隐私政策。更新版本将通过上方的&quot;最后更新&quot;日期标注。变更后继续使用应用即表示接受更新后的政策。</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">8</span>联系我们</h2>
+    <p>如对本隐私政策有任何疑问，请通过以下方式联系我们：support@i2r.org.com</p>
+  </section>
+  <section class="section">
+    <h2><span class="num">9</span>适用法律</h2>
+    <p>本隐私政策受越南法律管辖。任何争议应提交越南法院专属管辖。</p>
+  </section>
+
+  <footer>© 2026 AIoT Global</footer>
+</div>
+</body>
+</html>
