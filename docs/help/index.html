@@ -489,11 +489,13 @@ const T = {
     fix_tip: "If the TV was found before but now shows offline, tap the TV card to try reconnecting — it often reconnects in 2–3 seconds.",
     faq_title: "FAQ",
     faqs: [
-      { q: "My TV was added but it always shows 'disconnected'.", a: "Make sure the TV is powered on and on the same network. The app auto-reconnects when you open the remote — just tap the TV card." },
-      { q: "I entered the PIN but got an error.", a: "Some TVs expire the PIN after 60 seconds. Go back, tap the TV again to trigger a new pairing, and enter the PIN quickly." },
-      { q: "Scan found nothing even though my TV is on.", a: "Try the Manual tab and enter the TV IP directly. Also check that remote control is enabled in your TV settings." },
+      { code: "remote_disconnect", q: "My TV was added but it always shows 'disconnected'.", a: "Make sure the TV is powered on and on the same network. The app auto-reconnects when you open the remote — just tap the TV card." },
+      { code: "pairing_pin", q: "I entered the PIN but got an error.", a: "Some TVs expire the PIN after 60 seconds. Go back, tap the TV again to trigger a new pairing, and enter the PIN quickly." },
+      { code: "scan_empty", q: "Scan found nothing even though my TV is on.", a: "Try the Manual tab and enter the TV IP directly. Also check that remote control is enabled in your TV settings." },
+      { code: "pairing_connect", q: "The app can't connect to my TV at all.", a: "Check that the TV's network remote feature is enabled (see By Brand section). Try restarting the TV and scanning again." },
       { q: "The remote buttons work but volume/power don't.", a: "Volume and power may use IR or a different protocol not supported over Wi-Fi for your model. Bluetooth HID keyboard may help for navigation." },
-      { q: "BT Keyboard says 'not connected' even after pairing.", a: "Make sure the TV's Bluetooth is in pairing mode or already paired. Try removing the pairing from the TV side and re-pairing from your phone's Bluetooth settings." },
+      { code: "bt_connect", q: "BT Keyboard says 'not connected' even after pairing.", a: "Make sure the TV's Bluetooth is in pairing mode or already paired. Try removing the pairing from the TV side and re-pairing from your phone's Bluetooth settings." },
+      { code: "bt_permission", q: "BT Keyboard shows a permission error.", a: "Go to phone Settings → Apps → SmartTV RC → Permissions → Nearby Devices → Allow. Then return to the app." },
       { q: "Is my data sent to any server?", a: "No. The app communicates directly with your TV on the local network. No TV data is sent to external servers." },
       { q: "Can I control multiple TVs?", a: "Yes. Add each TV separately. Tap the TV card on the Home screen to switch between them." },
     ],
@@ -801,6 +803,7 @@ function renderFaq() {
   (d.faqs || []).forEach((item, i) => {
     const div = document.createElement('div');
     div.className = 'faq-item';
+    if (item.code) div.id = 'faq-' + item.code;
     div.innerHTML = `
       <div class="faq-q">
         <span>${item.q}</span>
@@ -815,6 +818,38 @@ function renderFaq() {
     });
     container.appendChild(div);
   });
+}
+
+// Open a specific FAQ item by error code, or fall back to the FAQ section.
+function scrollToError(errorCode) {
+  const faqSection = document.getElementById('faq');
+  // Open the FAQ section first
+  if (faqSection) {
+    const header = faqSection.querySelector('.section-header');
+    const body = faqSection.querySelector('.section-body');
+    if (header && !body.classList.contains('open')) {
+      header.classList.add('open');
+      body.classList.add('open');
+    }
+  }
+
+  // Try to find the specific FAQ item
+  const item = document.getElementById('faq-' + errorCode);
+  if (item) {
+    // Auto-expand the answer
+    const ans = item.querySelector('.faq-a');
+    const chev = item.querySelector('.faq-chevron');
+    if (ans) ans.classList.add('open');
+    if (chev) chev.classList.add('open');
+    // Highlight briefly
+    item.style.transition = 'background 0.3s';
+    item.style.background = 'rgba(108,99,255,0.15)';
+    setTimeout(() => { item.style.background = ''; }, 1500);
+    setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+  } else {
+    // No matching FAQ — scroll to FAQ section top
+    if (faqSection) setTimeout(() => faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  }
 }
 
 // ── Accordion ─────────────────────────────────────────────────────────────────
@@ -858,7 +893,15 @@ function scrollToScreen(screen) {
   renderFaq();
 
   const screen = params.get('screen');
-  if (screen) setTimeout(() => scrollToScreen(screen), 200);
+  const anchor = params.get('anchor'); // e.g. error_pairing_pin
+
+  if (anchor && anchor.startsWith('error_')) {
+    // Deep-link to specific FAQ item
+    const code = anchor.slice(6); // strip 'error_'
+    setTimeout(() => scrollToError(code), 250);
+  } else if (screen) {
+    setTimeout(() => scrollToScreen(screen), 200);
+  }
 })();
 </script>
 </body>
