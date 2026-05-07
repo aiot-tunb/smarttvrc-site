@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartTV RC – Help</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232636;
+    --accent: #6c63ff;
+    --accent2: #4fc3f7;
+    --text: #e8eaf6;
+    --text2: #9fa8c7;
+    --success: #69f0ae;
+    --warn: #ffd740;
+    --danger: #ff5252;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #0f1117 60%);
+    border-bottom: 1px solid #2d3152;
+    padding: 20px 24px 16px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    flex-wrap: wrap;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo svg { width: 32px; height: 32px; }
+  .logo-text { font-size: 1.1rem; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .logo-sub { font-size: 0.75rem; color: var(--text2); }
+
+  /* ── Language picker ── */
+  .lang-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lang-btn {
+    padding: 5px 12px; border-radius: 20px; border: 1px solid #2d3152;
+    background: var(--surface); color: var(--text2);
+    cursor: pointer; font-size: 0.8rem; transition: all 0.18s;
+  }
+  .lang-btn:hover { border-color: var(--accent); color: var(--text); }
+  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+
+  /* ── Layout ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 0 16px 60px; }
+
+  /* ── Section nav pills ── */
+  .toc {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 20px 0 8px;
+    position: sticky; top: 69px; z-index: 90;
+    background: var(--bg);
+    border-bottom: 1px solid #1e2133;
+    margin-bottom: 24px;
+  }
+  .toc a {
+    padding: 5px 14px; border-radius: 20px; border: 1px solid #2d3152;
+    background: var(--surface); color: var(--text2);
+    text-decoration: none; font-size: 0.78rem; transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .toc a:hover { border-color: var(--accent2); color: var(--text); }
+
+  /* ── Section ── */
+  .section { margin-bottom: 36px; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; user-select: none;
+    padding: 16px 20px;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid #2d3152;
+    transition: border-color 0.18s;
+  }
+  .section-header:hover { border-color: var(--accent); }
+  .section-header.open { border-radius: var(--radius) var(--radius) 0 0; border-bottom-color: transparent; }
+  .section-icon { font-size: 1.3rem; }
+  .section-title { font-size: 1rem; font-weight: 700; flex: 1; }
+  .section-badge {
+    font-size: 0.7rem; padding: 2px 8px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-weight: 600;
+  }
+  .chevron { color: var(--text2); transition: transform 0.2s; font-size: 0.9rem; }
+  .section-header.open .chevron { transform: rotate(180deg); }
+
+  .section-body {
+    background: var(--surface); border: 1px solid #2d3152;
+    border-top: none; border-radius: 0 0 var(--radius) var(--radius);
+    padding: 20px; display: none;
+  }
+  .section-body.open { display: block; }
+
+  /* ── Thread/steps ── */
+  .thread { position: relative; padding-left: 36px; }
+  .thread::before {
+    content: ''; position: absolute; left: 14px; top: 12px; bottom: 12px;
+    width: 2px; background: linear-gradient(to bottom, var(--accent), transparent);
+    border-radius: 1px;
+  }
+  .step {
+    position: relative; margin-bottom: 20px;
+    background: var(--surface2); border-radius: var(--radius-sm);
+    padding: 14px 16px; border: 1px solid #2a2e48;
+  }
+  .step::before {
+    content: attr(data-n);
+    position: absolute; left: -28px; top: 12px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .step-body { font-size: 0.85rem; color: var(--text2); }
+  .step-body p { margin-top: 6px; }
+
+  /* ── Brand cards ── */
+  .brand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .brand-card {
+    background: var(--surface2); border-radius: var(--radius-sm);
+    border: 1px solid #2a2e48; padding: 14px 16px;
+  }
+  .brand-card .brand-name {
+    font-weight: 700; font-size: 0.9rem; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .brand-card .brand-detail { font-size: 0.82rem; color: var(--text2); line-height: 1.5; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot-green { background: var(--success); }
+  .dot-blue { background: var(--accent2); }
+  .dot-yellow { background: var(--warn); }
+
+  /* ── FAQ ── */
+  .faq-item {
+    border-bottom: 1px solid #2a2e48; padding: 14px 0;
+    cursor: pointer;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    font-weight: 600; font-size: 0.88rem;
+  }
+  .faq-a {
+    font-size: 0.83rem; color: var(--text2); margin-top: 10px;
+    padding-left: 8px; border-left: 3px solid var(--accent);
+    display: none; line-height: 1.6;
+  }
+  .faq-a.open { display: block; }
+  .faq-chevron { transition: transform 0.18s; font-size: 0.8rem; color: var(--text2); flex-shrink: 0; }
+  .faq-chevron.open { transform: rotate(180deg); }
+
+  /* ── Tip / warn boxes ── */
+  .tip, .warn, .info {
+    border-radius: var(--radius-sm); padding: 10px 14px;
+    font-size: 0.83rem; margin-top: 10px; line-height: 1.5;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .tip { background: #0d2818; border-left: 3px solid var(--success); color: #a7f3d0; }
+  .warn { background: #2a2000; border-left: 3px solid var(--warn); color: #fde68a; }
+  .info { background: #0d1f36; border-left: 3px solid var(--accent2); color: #bae6fd; }
+  .tip::before { content: '✅'; flex-shrink: 0; }
+  .warn::before { content: '⚠️'; flex-shrink: 0; }
+  .info::before { content: 'ℹ️'; flex-shrink: 0; }
+
+  kbd {
+    display: inline-block; background: #2a2e48; border: 1px solid #4a4e70;
+    border-radius: 4px; padding: 1px 6px; font-size: 0.78rem;
+    font-family: monospace; color: var(--text);
+  }
+
+  /* ── Highlight anchor ── */
+  :target { scroll-margin-top: 130px; }
+
+  @media (max-width: 500px) {
+    header { padding: 14px 14px 12px; }
+    .container { padding: 0 10px 50px; }
+    .section-body { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="32" height="32" rx="8" fill="#6c63ff"/>
+      <rect x="5" y="8" width="22" height="14" rx="2" fill="none" stroke="white" stroke-width="1.8"/>
+      <circle cx="16" cy="27" r="1.5" fill="white"/>
+      <line x1="16" y1="22" x2="16" y2="25.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="logo-text">SmartTV RC</div>
+      <div class="logo-sub" id="header-sub">User Guide</div>
+    </div>
+  </div>
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('vi')">VI</button>
+    <button class="lang-btn" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" onclick="setLang('ja')">日本語</button>
+    <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="toc">
+    <a href="#quick-start" class="i18n" data-key="nav_quick">🚀 Quick Start</a>
+    <a href="#add-tv" class="i18n" data-key="nav_add">📺 Add TV</a>
+    <a href="#brands" class="i18n" data-key="nav_brands">🔗 By Brand</a>
+    <a href="#bt-hid" class="i18n" data-key="nav_bt">⌨️ BT Keyboard</a>
+    <a href="#fix" class="i18n" data-key="nav_fix">🔧 Fix Connection</a>
+    <a href="#faq" class="i18n" data-key="nav_faq">❓ FAQ</a>
+  </div>
+
+  <!-- ══ QUICK START ══ -->
+  <div class="section" id="quick-start">
+    <div class="section-header open" onclick="toggle(this)">
+      <span class="section-icon">🚀</span>
+      <span class="section-title i18n" data-key="qs_title">Quick Start</span>
+      <span class="section-badge i18n" data-key="qs_badge">5 min</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body open">
+      <div class="thread">
+        <div class="step" data-n="1">
+          <div class="step-title i18n" data-key="qs_s1_t">Same Wi-Fi network</div>
+          <div class="step-body i18n" data-key="qs_s1_b">Make sure your phone and TV are connected to the same Wi-Fi router. This is required for all Wi-Fi control features.</div>
+        </div>
+        <div class="step" data-n="2">
+          <div class="step-title i18n" data-key="qs_s2_t">Enable network remote on your TV</div>
+          <div class="step-body">
+            <span class="i18n" data-key="qs_s2_b">Go to TV Settings → see the brand-specific section below for exact steps.</span>
+          </div>
+        </div>
+        <div class="step" data-n="3">
+          <div class="step-title i18n" data-key="qs_s3_t">Open the app → tap + to add TV</div>
+          <div class="step-body i18n" data-key="qs_s3_b">The app will auto-scan your network. Your TV should appear within 10–20 seconds. Tap it to start pairing.</div>
+        </div>
+        <div class="step" data-n="4">
+          <div class="step-title i18n" data-key="qs_s4_t">Accept the pairing request on your TV</div>
+          <div class="step-body i18n" data-key="qs_s4_b">A PIN or accept dialog will appear on your TV screen. Enter the PIN in the app, or press OK on your TV remote to accept.</div>
+        </div>
+        <div class="step" data-n="5">
+          <div class="step-title i18n" data-key="qs_s5_t">Start controlling!</div>
+          <div class="step-body i18n" data-key="qs_s5_b">You're ready. The remote screen will open automatically after pairing.</div>
+        </div>
+      </div>
+      <div class="tip i18n" data-key="qs_tip">Tap the TV card on the Home screen any time to reconnect instantly.</div>
+    </div>
+  </div>
+
+  <!-- ══ ADD TV ══ -->
+  <div class="section" id="add-tv">
+    <div class="section-header" onclick="toggle(this)">
+      <span class="section-icon">📺</span>
+      <span class="section-title i18n" data-key="add_title">Add TV Screen</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="thread">
+        <div class="step" data-n="1">
+          <div class="step-title i18n" data-key="add_s1_t">Auto Scan tab</div>
+          <div class="step-body i18n" data-key="add_s1_b">Tap <strong>Scan</strong> to discover all TVs on your network automatically. Supported brands appear as cards — tap one to start pairing.</div>
+        </div>
+        <div class="step" data-n="2">
+          <div class="step-title i18n" data-key="add_s2_t">Manual tab</div>
+          <div class="step-body i18n" data-key="add_s2_b">If auto-scan doesn't find your TV, switch to the <strong>Manual</strong> tab and enter the TV's IP address directly. You can find the IP in your TV's network settings or router admin page.</div>
+        </div>
+        <div class="step" data-n="3">
+          <div class="step-title i18n" data-key="add_s3_t">TV not showing up?</div>
+          <div class="step-body i18n" data-key="add_s3_b">Make sure remote control is enabled in your TV settings. See the Fix Connection section for detailed steps per brand.</div>
+        </div>
+      </div>
+      <div class="info i18n" data-key="add_info">Scan takes 10–30 seconds depending on network size. Keep the screen open until it finishes.</div>
+    </div>
+  </div>
+
+  <!-- ══ BY BRAND ══ -->
+  <div class="section" id="brands">
+    <div class="section-header" onclick="toggle(this)">
+      <span class="section-icon">🔗</span>
+      <span class="section-title i18n" data-key="br_title">Connection Guide by Brand</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="brand-grid">
+
+        <div class="brand-card">
+          <div class="brand-name"><span class="dot dot-green"></span>LG WebOS</div>
+          <div class="brand-detail i18n" data-key="br_lg">
+            Settings → All Settings → General → Mobile TV On → Turn On LG Connect Apps.<br><br>
+            When the app connects for the first time, a pairing popup appears on the TV — press <strong>Allow</strong>.<br><br>
+            Port: 3000 (WebSocket)
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-name"><span class="dot dot-blue"></span>Samsung Tizen</div>
+          <div class="brand-detail i18n" data-key="br_samsung">
+            Settings → General → External Device Manager → Device Connect Manager → Access Notification → Always Allow (or First Time Only).<br><br>
+            A PIN or accept dialog appears at first pairing.<br><br>
+            Port: 8002 (WebSocket)
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-name"><span class="dot dot-green"></span>Android TV / Google TV</div>
+          <div class="brand-detail i18n" data-key="br_atv">
+            No special setting needed — Android TV Remote Service runs automatically.<br><br>
+            On first connect, a 6-digit PIN appears on screen. Enter it in the app.<br><br>
+            Port: 6466 (ATV Remote)
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-name"><span class="dot dot-yellow"></span>Panasonic Viera</div>
+          <div class="brand-detail i18n" data-key="br_panasonic">
+            <strong>Modern models (Android TV):</strong> Same as Android TV above.<br><br>
+            <strong>Older Viera models:</strong> Network Settings → Network TV Manufacturer's Settings → TV Remote App Settings → On. Port: 55000 (NRC).
+          </div>
+        </div>
+
+        <div class="brand-card">
+          <div class="brand-name"><span class="dot dot-blue"></span>Roku</div>
+          <div class="brand-detail i18n" data-key="br_roku">
+            Settings → System → Advanced System Settings → External Control → ECP and DIAL → Enabled.<br><br>
+            No pairing needed — Roku uses open ECP protocol.<br><br>
+            Port: 8060
+          </div>
+        </div>
+
+      </div>
+      <div class="warn i18n" data-key="br_warn">Some TVs require the app to be on your TV's allowed device list. If the TV keeps rejecting connections, check the trusted devices list in TV settings.</div>
+    </div>
+  </div>
+
+  <!-- ══ BT HID ══ -->
+  <div class="section" id="bt-hid">
+    <div class="section-header" onclick="toggle(this)">
+      <span class="section-icon">⌨️</span>
+      <span class="section-title i18n" data-key="bt_title">Bluetooth Keyboard &amp; Mouse</span>
+      <span class="section-badge" style="background:#4fc3f7;color:#0f1117">Android</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="info i18n" data-key="bt_info">This feature turns your Android phone into a Bluetooth HID keyboard and trackpad — useful for typing passwords, URLs, or controlling a TV that doesn't support Wi-Fi control. Requires Android 9 (Pie) or higher.</div>
+      <br>
+      <div class="thread">
+        <div class="step" data-n="1">
+          <div class="step-title i18n" data-key="bt_s1_t">Pair your TV via Bluetooth first</div>
+          <div class="step-body i18n" data-key="bt_s1_b">Go to your phone's <strong>Bluetooth settings</strong> and pair with your TV (the TV must appear as a Bluetooth device). The TV typically shows up as its model name.</div>
+        </div>
+        <div class="step" data-n="2">
+          <div class="step-title i18n" data-key="bt_s2_t">Open BT Keyboard & Mouse in the app</div>
+          <div class="step-body i18n" data-key="bt_s2_b">From the Remote screen, tap the <kbd>⌨</kbd> icon in the top bar. Or tap the keyboard icon on the Home screen.</div>
+        </div>
+        <div class="step" data-n="3">
+          <div class="step-title i18n" data-key="bt_s3_t">Select your TV from the list</div>
+          <div class="step-body i18n" data-key="bt_s3_b">The screen shows all paired Bluetooth devices. Tap your TV to connect. You can also tap <strong>Scan</strong> to discover nearby devices.</div>
+        </div>
+        <div class="step" data-n="4">
+          <div class="step-title i18n" data-key="bt_s4_t">Use the Trackpad and Keyboard tabs</div>
+          <div class="step-body i18n" data-key="bt_s4_b"><strong>Trackpad:</strong> drag to move cursor, two-finger scroll available. Use arrow buttons for D-pad navigation.<br><strong>Keyboard:</strong> type text directly, use shift and special keys. Tap Send or Enter to confirm.</div>
+        </div>
+      </div>
+      <div class="warn i18n" data-key="bt_warn">Not available on iOS — Apple restricts Bluetooth HID peripheral mode on iPhone. Use the Wi-Fi remote instead.</div>
+    </div>
+  </div>
+
+  <!-- ══ FIX CONNECTION ══ -->
+  <div class="section" id="fix">
+    <div class="section-header" onclick="toggle(this)">
+      <span class="section-icon">🔧</span>
+      <span class="section-title i18n" data-key="fix_title">Fix Connection Problems</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="thread">
+        <div class="step" data-n="1">
+          <div class="step-title i18n" data-key="fix_s1_t">Check same network</div>
+          <div class="step-body i18n" data-key="fix_s1_b">Phone and TV must be on the same Wi-Fi network (same SSID). Guest networks and VPNs can isolate devices from each other.</div>
+        </div>
+        <div class="step" data-n="2">
+          <div class="step-title i18n" data-key="fix_s2_t">Enable remote control on TV</div>
+          <div class="step-body i18n" data-key="fix_s2_b">Each brand has a different setting path. See the By Brand section above for exact steps. The option is often called "Remote Device", "Mobile TV On", or "External Control".</div>
+        </div>
+        <div class="step" data-n="3">
+          <div class="step-title i18n" data-key="fix_s3_t">Restart TV and try again</div>
+          <div class="step-body i18n" data-key="fix_s3_b">Power cycle the TV (fully off, wait 10 seconds, turn back on). Then try scanning again in the app.</div>
+        </div>
+        <div class="step" data-n="4">
+          <div class="step-title i18n" data-key="fix_s4_t">Check TV firewall / AP Isolation</div>
+          <div class="step-body i18n" data-key="fix_s4_b">Some routers have "AP Isolation" or "Client Isolation" that prevents devices on the same network from talking to each other. Disable it in your router settings.</div>
+        </div>
+        <div class="step" data-n="5">
+          <div class="step-title i18n" data-key="fix_s5_t">Remove and re-add the TV</div>
+          <div class="step-body i18n" data-key="fix_s5_b">On the Home screen, long-press the TV card → Remove. Then add it again. This clears stale credentials.</div>
+        </div>
+        <div class="step" data-n="6">
+          <div class="step-title i18n" data-key="fix_s6_t">Grant Bluetooth permission (BT Keyboard)</div>
+          <div class="step-body i18n" data-key="fix_s6_b">Go to phone Settings → Apps → SmartTV RC → Permissions → Nearby Devices → Allow.</div>
+        </div>
+      </div>
+      <div class="tip i18n" data-key="fix_tip">If the TV was found before but now shows offline, tap the TV card to try reconnecting — it often reconnects in 2–3 seconds.</div>
+    </div>
+  </div>
+
+  <!-- ══ FAQ ══ -->
+  <div class="section" id="faq">
+    <div class="section-header" onclick="toggle(this)">
+      <span class="section-icon">❓</span>
+      <span class="section-title i18n" data-key="faq_title">FAQ</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+      <div id="faq-list"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ── i18n strings ──────────────────────────────────────────────────────────────
+const T = {
+  en: {
+    header_sub: "User Guide",
+    nav_quick: "🚀 Quick Start", nav_add: "📺 Add TV", nav_brands: "🔗 By Brand",
+    nav_bt: "⌨️ BT Keyboard", nav_fix: "🔧 Fix Connection", nav_faq: "❓ FAQ",
+    qs_title: "Quick Start", qs_badge: "5 min",
+    qs_s1_t: "Same Wi-Fi network",
+    qs_s1_b: "Make sure your phone and TV are connected to the same Wi-Fi router. This is required for all Wi-Fi control features.",
+    qs_s2_t: "Enable network remote on your TV",
+    qs_s2_b: "Go to TV Settings → see the brand-specific section below for exact steps.",
+    qs_s3_t: "Open the app → tap + to add TV",
+    qs_s3_b: "The app will auto-scan your network. Your TV should appear within 10–20 seconds. Tap it to start pairing.",
+    qs_s4_t: "Accept the pairing request on your TV",
+    qs_s4_b: "A PIN or accept dialog will appear on your TV screen. Enter the PIN in the app, or press OK on your TV remote to accept.",
+    qs_s5_t: "Start controlling!",
+    qs_s5_b: "You're ready. The remote screen will open automatically after pairing.",
+    qs_tip: "Tap the TV card on the Home screen any time to reconnect instantly.",
+    add_title: "Add TV Screen",
+    add_s1_t: "Auto Scan tab",
+    add_s1_b: "Tap <strong>Scan</strong> to discover all TVs on your network automatically. Supported brands appear as cards — tap one to start pairing.",
+    add_s2_t: "Manual tab",
+    add_s2_b: "If auto-scan doesn't find your TV, switch to the <strong>Manual</strong> tab and enter the TV's IP address directly. You can find the IP in your TV's network settings or router admin page.",
+    add_s3_t: "TV not showing up?",
+    add_s3_b: "Make sure remote control is enabled in your TV settings. See the Fix Connection section for detailed steps per brand.",
+    add_info: "Scan takes 10–30 seconds depending on network size. Keep the screen open until it finishes.",
+    br_title: "Connection Guide by Brand",
+    br_lg: "Settings → All Settings → General → Mobile TV On → Turn On LG Connect Apps.<br><br>When the app connects for the first time, a pairing popup appears on the TV — press <strong>Allow</strong>.<br><br>Port: 3000 (WebSocket)",
+    br_samsung: "Settings → General → External Device Manager → Device Connect Manager → Access Notification → Always Allow.<br><br>A PIN or accept dialog appears at first pairing.<br><br>Port: 8002 (WebSocket)",
+    br_atv: "No special setting needed — Android TV Remote Service runs automatically.<br><br>On first connect, a 6-digit PIN appears on screen. Enter it in the app.<br><br>Port: 6466",
+    br_panasonic: "<strong>Modern models (Android TV):</strong> Same as Android TV above.<br><br><strong>Older Viera models:</strong> Network Settings → Network TV Manufacturer's Settings → TV Remote App Settings → On. Port: 55000 (NRC).",
+    br_roku: "Settings → System → Advanced System Settings → External Control → ECP and DIAL → Enabled.<br><br>No pairing needed — Roku uses open ECP protocol.<br><br>Port: 8060",
+    br_warn: "Some TVs require the app to be on your TV's allowed device list. If the TV keeps rejecting connections, check the trusted devices list in TV settings.",
+    bt_title: "Bluetooth Keyboard & Mouse",
+    bt_info: "This feature turns your Android phone into a Bluetooth HID keyboard and trackpad — useful for typing passwords, URLs, or controlling a TV that doesn't support Wi-Fi control. Requires Android 9 (Pie) or higher.",
+    bt_s1_t: "Pair your TV via Bluetooth first",
+    bt_s1_b: "Go to your phone's <strong>Bluetooth settings</strong> and pair with your TV (the TV must appear as a Bluetooth device). The TV typically shows up as its model name.",
+    bt_s2_t: "Open BT Keyboard & Mouse in the app",
+    bt_s2_b: "From the Remote screen, tap the ⌨ icon in the top bar. Or tap the keyboard icon on the Home screen.",
+    bt_s3_t: "Select your TV from the list",
+    bt_s3_b: "The screen shows all paired Bluetooth devices. Tap your TV to connect. You can also tap <strong>Scan</strong> to discover nearby devices.",
+    bt_s4_t: "Use the Trackpad and Keyboard tabs",
+    bt_s4_b: "<strong>Trackpad:</strong> drag to move cursor, two-finger scroll available. Use arrow buttons for D-pad navigation.<br><strong>Keyboard:</strong> type text directly, use shift and special keys. Tap Send or Enter to confirm.",
+    bt_warn: "Not available on iOS — Apple restricts Bluetooth HID peripheral mode on iPhone. Use the Wi-Fi remote instead.",
+    fix_title: "Fix Connection Problems",
+    fix_s1_t: "Check same network",
+    fix_s1_b: "Phone and TV must be on the same Wi-Fi network (same SSID). Guest networks and VPNs can isolate devices from each other.",
+    fix_s2_t: "Enable remote control on TV",
+    fix_s2_b: "Each brand has a different setting path. See the By Brand section above for exact steps. The option is often called \"Remote Device\", \"Mobile TV On\", or \"External Control\".",
+    fix_s3_t: "Restart TV and try again",
+    fix_s3_b: "Power cycle the TV (fully off, wait 10 seconds, turn back on). Then try scanning again in the app.",
+    fix_s4_t: "Check TV firewall / AP Isolation",
+    fix_s4_b: "Some routers have \"AP Isolation\" or \"Client Isolation\" that prevents devices on the same network from talking to each other. Disable it in your router settings.",
+    fix_s5_t: "Remove and re-add the TV",
+    fix_s5_b: "On the Home screen, long-press the TV card → Remove. Then add it again. This clears stale credentials.",
+    fix_s6_t: "Grant Bluetooth permission (BT Keyboard)",
+    fix_s6_b: "Go to phone Settings → Apps → SmartTV RC → Permissions → Nearby Devices → Allow.",
+    fix_tip: "If the TV was found before but now shows offline, tap the TV card to try reconnecting — it often reconnects in 2–3 seconds.",
+    faq_title: "FAQ",
+    faqs: [
+      { q: "My TV was added but it always shows 'disconnected'.", a: "Make sure the TV is powered on and on the same network. The app auto-reconnects when you open the remote — just tap the TV card." },
+      { q: "I entered the PIN but got an error.", a: "Some TVs expire the PIN after 60 seconds. Go back, tap the TV again to trigger a new pairing, and enter the PIN quickly." },
+      { q: "Scan found nothing even though my TV is on.", a: "Try the Manual tab and enter the TV IP directly. Also check that remote control is enabled in your TV settings." },
+      { q: "The remote buttons work but volume/power don't.", a: "Volume and power may use IR or a different protocol not supported over Wi-Fi for your model. Bluetooth HID keyboard may help for navigation." },
+      { q: "BT Keyboard says 'not connected' even after pairing.", a: "Make sure the TV's Bluetooth is in pairing mode or already paired. Try removing the pairing from the TV side and re-pairing from your phone's Bluetooth settings." },
+      { q: "Is my data sent to any server?", a: "No. The app communicates directly with your TV on the local network. No TV data is sent to external servers." },
+      { q: "Can I control multiple TVs?", a: "Yes. Add each TV separately. Tap the TV card on the Home screen to switch between them." },
+    ],
+  },
+  vi: {
+    header_sub: "Hướng dẫn sử dụng",
+    nav_quick: "🚀 Bắt đầu nhanh", nav_add: "📺 Thêm TV", nav_brands: "🔗 Theo hãng",
+    nav_bt: "⌨️ BT Bàn phím", nav_fix: "🔧 Sửa kết nối", nav_faq: "❓ FAQ",
+    qs_title: "Bắt đầu nhanh", qs_badge: "5 phút",
+    qs_s1_t: "Cùng mạng Wi-Fi",
+    qs_s1_b: "Đảm bảo điện thoại và TV kết nối cùng một bộ định tuyến Wi-Fi. Đây là điều kiện bắt buộc cho tất cả tính năng điều khiển qua Wi-Fi.",
+    qs_s2_t: "Bật điều khiển từ xa qua mạng trên TV",
+    qs_s2_b: "Vào Cài đặt TV → xem phần hướng dẫn theo hãng bên dưới để biết các bước chính xác.",
+    qs_s3_t: "Mở ứng dụng → nhấn + để thêm TV",
+    qs_s3_b: "Ứng dụng sẽ tự động quét mạng của bạn. TV sẽ xuất hiện trong vòng 10–20 giây. Nhấn vào TV để bắt đầu ghép nối.",
+    qs_s4_t: "Chấp nhận yêu cầu ghép nối trên TV",
+    qs_s4_b: "Một hộp thoại PIN hoặc xác nhận sẽ xuất hiện trên màn hình TV. Nhập PIN vào ứng dụng, hoặc nhấn OK trên điều khiển TV để chấp nhận.",
+    qs_s5_t: "Bắt đầu điều khiển!",
+    qs_s5_b: "Bạn đã sẵn sàng. Màn hình điều khiển sẽ tự động mở sau khi ghép nối.",
+    qs_tip: "Nhấn vào thẻ TV trên màn hình Chính bất cứ lúc nào để kết nối lại ngay lập tức.",
+    add_title: "Màn hình Thêm TV",
+    add_s1_t: "Tab Quét tự động",
+    add_s1_b: "Nhấn <strong>Quét</strong> để tự động phát hiện tất cả TV trên mạng. Các hãng được hỗ trợ xuất hiện dưới dạng thẻ — nhấn vào một thẻ để bắt đầu ghép nối.",
+    add_s2_t: "Tab Thủ công",
+    add_s2_b: "Nếu quét tự động không tìm thấy TV, chuyển sang tab <strong>Thủ công</strong> và nhập trực tiếp địa chỉ IP của TV. Bạn có thể tìm IP trong cài đặt mạng của TV hoặc trang quản trị router.",
+    add_s3_t: "TV không hiển thị?",
+    add_s3_b: "Đảm bảo rằng điều khiển từ xa đã được bật trong cài đặt TV. Xem phần Sửa kết nối để biết các bước chi tiết theo từng hãng.",
+    add_info: "Quét mất 10–30 giây tùy thuộc vào kích thước mạng. Giữ màn hình mở cho đến khi hoàn tất.",
+    br_title: "Hướng dẫn kết nối theo hãng",
+    br_lg: "Cài đặt → Tất cả cài đặt → Chung → Mobile TV On → Bật LG Connect Apps.<br><br>Khi ứng dụng kết nối lần đầu tiên, một hộp thoại ghép nối xuất hiện trên TV — nhấn <strong>Cho phép</strong>.<br><br>Cổng: 3000 (WebSocket)",
+    br_samsung: "Cài đặt → Chung → Quản lý thiết bị ngoài → Quản lý kết nối thiết bị → Thông báo truy cập → Luôn cho phép.<br><br>Hộp thoại PIN hoặc chấp nhận xuất hiện lần ghép nối đầu tiên.<br><br>Cổng: 8002 (WebSocket)",
+    br_atv: "Không cần cài đặt đặc biệt — Dịch vụ Android TV Remote chạy tự động.<br><br>Khi kết nối lần đầu, một PIN 6 chữ số xuất hiện trên màn hình. Nhập vào ứng dụng.<br><br>Cổng: 6466",
+    br_panasonic: "<strong>Các model mới (Android TV):</strong> Tương tự Android TV ở trên.<br><br><strong>Viera đời cũ:</strong> Cài đặt mạng → Cài đặt TV Manufacturer → Cài đặt ứng dụng TV Remote → Bật. Cổng: 55000 (NRC).",
+    br_roku: "Cài đặt → Hệ thống → Cài đặt hệ thống nâng cao → Điều khiển bên ngoài → ECP và DIAL → Bật.<br><br>Không cần ghép nối — Roku sử dụng giao thức ECP mở.<br><br>Cổng: 8060",
+    br_warn: "Một số TV yêu cầu ứng dụng phải có trong danh sách thiết bị được phép. Nếu TV tiếp tục từ chối kết nối, hãy kiểm tra danh sách thiết bị tin cậy trong cài đặt TV.",
+    bt_title: "Bàn phím & Chuột Bluetooth",
+    bt_info: "Tính năng này biến điện thoại Android của bạn thành bàn phím và trackpad Bluetooth HID — hữu ích để nhập mật khẩu, URL, hoặc điều khiển TV không hỗ trợ Wi-Fi. Yêu cầu Android 9 (Pie) trở lên.",
+    bt_s1_t: "Ghép nối TV qua Bluetooth trước",
+    bt_s1_b: "Vào <strong>Cài đặt Bluetooth</strong> trên điện thoại và ghép nối với TV (TV phải hiển thị là thiết bị Bluetooth). TV thường hiển thị theo tên model.",
+    bt_s2_t: "Mở BT Bàn phím & Chuột trong ứng dụng",
+    bt_s2_b: "Từ màn hình Điều khiển, nhấn biểu tượng ⌨ trên thanh trên cùng. Hoặc nhấn biểu tượng bàn phím trên màn hình Chính.",
+    bt_s3_t: "Chọn TV từ danh sách",
+    bt_s3_b: "Màn hình hiển thị tất cả thiết bị Bluetooth đã ghép nối. Nhấn TV để kết nối. Bạn cũng có thể nhấn <strong>Quét</strong> để tìm thiết bị gần đó.",
+    bt_s4_t: "Sử dụng tab Trackpad và Bàn phím",
+    bt_s4_b: "<strong>Trackpad:</strong> kéo để di chuyển con trỏ. Sử dụng nút mũi tên để điều hướng D-pad.<br><strong>Bàn phím:</strong> gõ văn bản trực tiếp, sử dụng shift và phím đặc biệt. Nhấn Gửi hoặc Enter để xác nhận.",
+    bt_warn: "Không khả dụng trên iOS — Apple hạn chế chế độ peripheral Bluetooth HID trên iPhone. Hãy sử dụng điều khiển Wi-Fi thay thế.",
+    fix_title: "Sửa lỗi kết nối",
+    fix_s1_t: "Kiểm tra cùng mạng",
+    fix_s1_b: "Điện thoại và TV phải cùng mạng Wi-Fi (cùng SSID). Mạng khách và VPN có thể cô lập các thiết bị.",
+    fix_s2_t: "Bật điều khiển từ xa trên TV",
+    fix_s2_b: "Mỗi hãng có đường dẫn cài đặt khác nhau. Xem phần Theo hãng ở trên để biết các bước chính xác. Tùy chọn thường được gọi là \"Remote Device\", \"Mobile TV On\" hoặc \"External Control\".",
+    fix_s3_t: "Khởi động lại TV và thử lại",
+    fix_s3_b: "Tắt TV hoàn toàn, đợi 10 giây, bật lại. Sau đó thử quét lại trong ứng dụng.",
+    fix_s4_t: "Kiểm tra AP Isolation của router",
+    fix_s4_b: "Một số router có tính năng \"AP Isolation\" hoặc \"Client Isolation\" ngăn các thiết bị trên cùng mạng giao tiếp với nhau. Tắt tính năng này trong cài đặt router.",
+    fix_s5_t: "Xóa và thêm lại TV",
+    fix_s5_b: "Trên màn hình Chính, nhấn giữ thẻ TV → Xóa. Sau đó thêm lại. Thao tác này xóa thông tin xác thực cũ.",
+    fix_s6_t: "Cấp quyền Bluetooth (BT Bàn phím)",
+    fix_s6_b: "Vào Cài đặt điện thoại → Ứng dụng → SmartTV RC → Quyền → Thiết bị gần đó → Cho phép.",
+    fix_tip: "Nếu TV đã được tìm thấy trước đó nhưng hiện hiển thị ngoại tuyến, hãy nhấn thẻ TV để thử kết nối lại — thường kết nối lại trong 2–3 giây.",
+    faq_title: "Câu hỏi thường gặp",
+    faqs: [
+      { q: "TV đã thêm nhưng luôn hiển thị 'đã ngắt kết nối'.", a: "Đảm bảo TV đang bật và trên cùng mạng. Ứng dụng tự động kết nối lại khi bạn mở điều khiển — chỉ cần nhấn thẻ TV." },
+      { q: "Tôi nhập PIN nhưng bị lỗi.", a: "Một số TV hết hạn PIN sau 60 giây. Quay lại, nhấn TV để kích hoạt ghép nối mới, và nhập PIN nhanh chóng." },
+      { q: "Quét không tìm thấy gì dù TV đang bật.", a: "Thử tab Thủ công và nhập IP TV trực tiếp. Kiểm tra rằng điều khiển từ xa đã được bật trong cài đặt TV." },
+      { q: "Nút điều khiển hoạt động nhưng âm lượng/nguồn thì không.", a: "Âm lượng và nguồn có thể sử dụng IR hoặc giao thức khác không được hỗ trợ qua Wi-Fi cho model của bạn." },
+      { q: "BT Bàn phím báo 'chưa kết nối' dù đã ghép nối.", a: "Đảm bảo Bluetooth của TV đang ở chế độ ghép nối hoặc đã được ghép nối. Thử xóa ghép nối từ phía TV và ghép nối lại từ cài đặt Bluetooth điện thoại." },
+      { q: "Dữ liệu của tôi có được gửi đến máy chủ nào không?", a: "Không. Ứng dụng giao tiếp trực tiếp với TV trên mạng nội bộ. Không có dữ liệu TV nào được gửi đến máy chủ bên ngoài." },
+      { q: "Tôi có thể điều khiển nhiều TV không?", a: "Có. Thêm từng TV riêng biệt. Nhấn thẻ TV trên màn hình Chính để chuyển đổi giữa các TV." },
+    ],
+  },
+  zh: {
+    header_sub: "使用指南",
+    nav_quick: "🚀 快速开始", nav_add: "📺 添加电视", nav_brands: "🔗 按品牌",
+    nav_bt: "⌨️ 蓝牙键盘", nav_fix: "🔧 修复连接", nav_faq: "❓ 常见问题",
+    qs_title: "快速开始", qs_badge: "5分钟",
+    qs_s1_t: "相同Wi-Fi网络",
+    qs_s1_b: "确保手机和电视连接到相同的Wi-Fi路由器。这是所有Wi-Fi控制功能的必要条件。",
+    qs_s2_t: "在电视上启用网络遥控",
+    qs_s2_b: "进入电视设置 → 请参阅下面的品牌专属部分了解具体步骤。",
+    qs_s3_t: "打开应用 → 点击+添加电视",
+    qs_s3_b: "应用将自动扫描您的网络。您的电视应在10–20秒内出现。点击它开始配对。",
+    qs_s4_t: "在电视上接受配对请求",
+    qs_s4_b: "电视屏幕上将出现PIN码或接受对话框。在应用中输入PIN码，或按电视遥控器上的确定键接受。",
+    qs_s5_t: "开始控制！",
+    qs_s5_b: "您已准备就绪。配对后遥控屏幕将自动打开。",
+    qs_tip: "随时点击主屏幕上的电视卡片即可立即重新连接。",
+    add_title: "添加电视屏幕",
+    add_s1_t: "自动扫描选项卡",
+    add_s1_b: "点击<strong>扫描</strong>自动发现网络上的所有电视。支持的品牌以卡片形式显示 — 点击即可开始配对。",
+    add_s2_t: "手动选项卡",
+    add_s2_b: "如果自动扫描找不到您的电视，切换到<strong>手动</strong>选项卡并直接输入电视的IP地址。您可以在电视的网络设置或路由器管理页面中找到IP。",
+    add_s3_t: "电视未显示？",
+    add_s3_b: "确保在电视设置中已启用遥控功能。请参阅修复连接部分了解各品牌的详细步骤。",
+    add_info: "扫描时间取决于网络大小，需要10–30秒。在完成之前请保持屏幕打开。",
+    br_title: "按品牌的连接指南",
+    br_lg: "设置 → 所有设置 → 常规 → 手机电视开启 → 开启LG Connect应用。<br><br>应用首次连接时，电视上会出现配对弹窗 — 按<strong>允许</strong>。<br><br>端口：3000（WebSocket）",
+    br_samsung: "设置 → 常规 → 外部设备管理器 → 设备连接管理器 → 访问通知 → 始终允许。<br><br>首次配对时会出现PIN码或接受对话框。<br><br>端口：8002（WebSocket）",
+    br_atv: "无需特殊设置 — Android TV远程服务自动运行。<br><br>首次连接时屏幕上会出现6位PIN码。在应用中输入。<br><br>端口：6466",
+    br_panasonic: "<strong>新款机型（Android TV）：</strong>与上面的Android TV相同。<br><br><strong>旧款Viera机型：</strong>网络设置 → 网络TV制造商设置 → TV遥控应用设置 → 开启。端口：55000（NRC）。",
+    br_roku: "设置 → 系统 → 高级系统设置 → 外部控制 → ECP和DIAL → 已启用。<br><br>无需配对 — Roku使用开放的ECP协议。<br><br>端口：8060",
+    br_warn: "某些电视要求应用在允许设备列表中。如果电视持续拒绝连接，请检查电视设置中的受信任设备列表。",
+    bt_title: "蓝牙键盘与鼠标",
+    bt_info: "此功能将您的Android手机变为蓝牙HID键盘和触控板 — 适用于输入密码、URL，或控制不支持Wi-Fi控制的电视。需要Android 9（Pie）或更高版本。",
+    bt_s1_t: "首先通过蓝牙配对电视",
+    bt_s1_b: "进入手机的<strong>蓝牙设置</strong>并与电视配对（电视必须显示为蓝牙设备）。电视通常以其型号名称显示。",
+    bt_s2_t: "在应用中打开蓝牙键盘与鼠标",
+    bt_s2_b: "在遥控屏幕上，点击顶部栏中的⌨图标。或点击主屏幕上的键盘图标。",
+    bt_s3_t: "从列表中选择您的电视",
+    bt_s3_b: "屏幕显示所有已配对的蓝牙设备。点击您的电视进行连接。也可以点击<strong>扫描</strong>发现附近的设备。",
+    bt_s4_t: "使用触控板和键盘选项卡",
+    bt_s4_b: "<strong>触控板：</strong>拖动移动光标，支持双指滚动。使用方向键进行D-pad导航。<br><strong>键盘：</strong>直接输入文本，使用Shift和特殊键。点击发送或Enter确认。",
+    bt_warn: "不适用于iOS — Apple在iPhone上限制了蓝牙HID外设模式。请改用Wi-Fi遥控。",
+    fix_title: "修复连接问题",
+    fix_s1_t: "检查相同网络",
+    fix_s1_b: "手机和电视必须在相同的Wi-Fi网络（相同SSID）。访客网络和VPN可能会隔离设备。",
+    fix_s2_t: "在电视上启用遥控功能",
+    fix_s2_b: "每个品牌的设置路径不同。请参阅上面的按品牌部分了解具体步骤。该选项通常称为\"远程设备\"、\"手机电视开启\"或\"外部控制\"。",
+    fix_s3_t: "重启电视并重试",
+    fix_s3_b: "完全关闭电视，等待10秒，重新开机。然后在应用中重新扫描。",
+    fix_s4_t: "检查路由器AP隔离",
+    fix_s4_b: "某些路由器有\"AP隔离\"或\"客户端隔离\"功能，会阻止同一网络上的设备互相通信。在路由器设置中禁用此功能。",
+    fix_s5_t: "删除并重新添加电视",
+    fix_s5_b: "在主屏幕上，长按电视卡片 → 删除。然后重新添加。这将清除旧凭据。",
+    fix_s6_t: "授予蓝牙权限（蓝牙键盘）",
+    fix_s6_b: "进入手机设置 → 应用 → SmartTV RC → 权限 → 附近设备 → 允许。",
+    fix_tip: "如果电视之前被找到但现在显示离线，点击电视卡片尝试重新连接 — 通常在2–3秒内重新连接。",
+    faq_title: "常见问题",
+    faqs: [
+      { q: "电视已添加但始终显示'已断开连接'。", a: "确保电视已开机且在相同网络上。打开遥控时应用会自动重新连接 — 只需点击电视卡片。" },
+      { q: "我输入了PIN码但出现错误。", a: "某些电视的PIN码在60秒后过期。返回，再次点击电视触发新的配对，然后快速输入PIN码。" },
+      { q: "即使电视开着，扫描也找不到任何东西。", a: "尝试手动选项卡并直接输入电视IP。同时检查电视设置中是否已启用遥控功能。" },
+      { q: "遥控按钮工作但音量/电源不响应。", a: "音量和电源可能使用IR或您的型号不支持的Wi-Fi协议。蓝牙HID键盘可能有助于导航。" },
+      { q: "蓝牙键盘显示'未连接'即使已配对。", a: "确保电视的蓝牙处于配对模式或已配对。尝试从电视侧删除配对并从手机蓝牙设置重新配对。" },
+      { q: "我的数据会发送到任何服务器吗？", a: "不会。应用直接在本地网络上与电视通信。不会向外部服务器发送任何电视数据。" },
+      { q: "我可以控制多台电视吗？", a: "可以。分别添加每台电视。点击主屏幕上的电视卡片在不同电视之间切换。" },
+    ],
+  },
+  ja: {
+    header_sub: "ユーザーガイド",
+    nav_quick: "🚀 クイックスタート", nav_add: "📺 TVの追加", nav_brands: "🔗 ブランド別",
+    nav_bt: "⌨️ BTキーボード", nav_fix: "🔧 接続修復", nav_faq: "❓ FAQ",
+    qs_title: "クイックスタート", qs_badge: "5分",
+    qs_s1_t: "同じWi-Fiネットワーク",
+    qs_s1_b: "スマートフォンとテレビが同じWi-Fiルーターに接続されていることを確認してください。これはすべてのWi-Fi制御機能に必要です。",
+    qs_s2_t: "テレビのネットワークリモートを有効にする",
+    qs_s2_b: "テレビの設定を開く → 正確な手順については以下のブランド別セクションを参照してください。",
+    qs_s3_t: "アプリを開く → +をタップしてTVを追加",
+    qs_s3_b: "アプリはネットワークを自動スキャンします。テレビは10〜20秒以内に表示されます。タップしてペアリングを開始します。",
+    qs_s4_t: "テレビでペアリング要求を承認する",
+    qs_s4_b: "テレビ画面にPINまたは承認ダイアログが表示されます。アプリにPINを入力するか、テレビリモコンのOKを押して承認します。",
+    qs_s5_t: "コントロール開始！",
+    qs_s5_b: "準備完了です。ペアリング後にリモート画面が自動的に開きます。",
+    qs_tip: "ホーム画面のTVカードをいつでもタップしてすぐに再接続できます。",
+    add_title: "TV追加画面",
+    add_s1_t: "自動スキャンタブ",
+    add_s1_b: "<strong>スキャン</strong>をタップしてネットワーク上のすべてのテレビを自動的に検出します。サポートされているブランドがカードとして表示されます — タップしてペアリングを開始します。",
+    add_s2_t: "手動タブ",
+    add_s2_b: "自動スキャンでテレビが見つからない場合は、<strong>手動</strong>タブに切り替えてテレビのIPアドレスを直接入力します。IPはテレビのネットワーク設定またはルーターの管理ページで確認できます。",
+    add_s3_t: "テレビが表示されない？",
+    add_s3_b: "テレビの設定でリモートコントロールが有効になっていることを確認してください。ブランド別の詳細な手順については接続修復セクションを参照してください。",
+    add_info: "スキャンはネットワークの規模によって10〜30秒かかります。完了するまで画面を開いたままにしてください。",
+    br_title: "ブランド別接続ガイド",
+    br_lg: "設定 → すべての設定 → 一般 → モバイルTV接続 → LG Connect Appsをオンにする。<br><br>アプリが初めて接続すると、テレビにペアリングポップアップが表示されます — <strong>許可</strong>を押します。<br><br>ポート：3000（WebSocket）",
+    br_samsung: "設定 → 一般 → 外部デバイスマネージャー → デバイス接続マネージャー → アクセス通知 → 常に許可。<br><br>初回ペアリング時にPINまたは承認ダイアログが表示されます。<br><br>ポート：8002（WebSocket）",
+    br_atv: "特別な設定は不要 — Android TVリモートサービスは自動的に動作します。<br><br>初回接続時に6桁のPINが画面に表示されます。アプリに入力してください。<br><br>ポート：6466",
+    br_panasonic: "<strong>新しいモデル（Android TV）：</strong>上記のAndroid TVと同じです。<br><br><strong>古いVieraモデル：</strong>ネットワーク設定 → ネットワークTVメーカー設定 → TVリモートアプリ設定 → オン。ポート：55000（NRC）。",
+    br_roku: "設定 → システム → システムの詳細設定 → 外部制御 → ECPとDIAL → 有効。<br><br>ペアリング不要 — RokuはオープンなECPプロトコルを使用します。<br><br>ポート：8060",
+    br_warn: "一部のテレビは、アプリが許可デバイスリストに含まれている必要があります。テレビが接続を拒否し続ける場合は、テレビ設定の信頼済みデバイスリストを確認してください。",
+    bt_title: "Bluetoothキーボード＆マウス",
+    bt_info: "この機能はAndroidスマートフォンをBluetoothのHIDキーボードとトラックパッドに変換します — パスワードやURLの入力、Wi-Fi制御をサポートしていないテレビの操作に役立ちます。Android 9（Pie）以上が必要です。",
+    bt_s1_t: "まずBluetoothでテレビをペアリング",
+    bt_s1_b: "スマートフォンの<strong>Bluetooth設定</strong>を開き、テレビとペアリングします（テレビがBluetooth デバイスとして表示される必要があります）。テレビは通常モデル名で表示されます。",
+    bt_s2_t: "アプリでBTキーボード＆マウスを開く",
+    bt_s2_b: "リモート画面から、上部バーの⌨アイコンをタップします。またはホーム画面のキーボードアイコンをタップします。",
+    bt_s3_t: "リストからテレビを選択",
+    bt_s3_b: "画面にはペアリング済みのすべてのBluetoothデバイスが表示されます。テレビをタップして接続します。<strong>スキャン</strong>をタップして近くのデバイスを検出することもできます。",
+    bt_s4_t: "トラックパッドとキーボードタブを使用",
+    bt_s4_b: "<strong>トラックパッド：</strong>ドラッグしてカーソルを移動します。矢印ボタンでD-padナビゲーションができます。<br><strong>キーボード：</strong>テキストを直接入力し、シフトキーと特殊キーを使用します。送信またはEnterをタップして確認します。",
+    bt_warn: "iOSでは利用できません — AppleはiPhoneでのBluetoothHIDペリフェラルモードを制限しています。代わりにWi-Fiリモートをご使用ください。",
+    fix_title: "接続の問題を修正",
+    fix_s1_t: "同じネットワークを確認",
+    fix_s1_b: "スマートフォンとテレビは同じWi-Fiネットワーク（同じSSID）に接続されている必要があります。ゲストネットワークとVPNはデバイスを互いに分離する場合があります。",
+    fix_s2_t: "テレビでリモートコントロールを有効にする",
+    fix_s2_b: "ブランドによって設定パスが異なります。正確な手順については上記のブランド別セクションを参照してください。オプションは「リモートデバイス」、「モバイルTV接続」、または「外部制御」と呼ばれることが多いです。",
+    fix_s3_t: "テレビを再起動して再試行",
+    fix_s3_b: "テレビを完全にオフにし、10秒待って電源を入れ直します。その後アプリで再度スキャンを試みます。",
+    fix_s4_t: "ルーターのAP隔離を確認",
+    fix_s4_b: "一部のルーターには、同じネットワーク上のデバイスが互いに通信するのを防ぐ「AP隔離」または「クライアント隔離」機能があります。ルーター設定でこれを無効にしてください。",
+    fix_s5_t: "テレビを削除して再追加",
+    fix_s5_b: "ホーム画面でTVカードを長押し → 削除。その後再度追加します。これにより古い認証情報がクリアされます。",
+    fix_s6_t: "Bluetooth権限を付与（BTキーボード）",
+    fix_s6_b: "スマートフォン設定 → アプリ → SmartTV RC → 権限 → 近くのデバイス → 許可。",
+    fix_tip: "以前見つかったテレビがオフラインと表示されている場合は、TVカードをタップして再接続を試みてください — 通常2〜3秒で再接続されます。",
+    faq_title: "よくある質問",
+    faqs: [
+      { q: "テレビは追加されたが常に「切断済み」と表示される。", a: "テレビの電源が入っており、同じネットワーク上にあることを確認してください。リモートを開くとアプリが自動的に再接続します — TVカードをタップするだけです。" },
+      { q: "PINを入力したがエラーになった。", a: "一部のテレビではPINが60秒後に期限切れになります。戻って、テレビをタップして新しいペアリングをトリガーし、すばやくPINを入力してください。" },
+      { q: "テレビが電源オンでもスキャンで何も見つからない。", a: "手動タブでテレビのIPを直接入力してみてください。テレビの設定でリモートコントロールが有効になっているか確認してください。" },
+      { q: "リモートボタンは動作するが音量/電源が反応しない。", a: "音量と電源はIRや、お使いのモデルではWi-Fiでサポートされていないプロトコルを使用している可能性があります。" },
+      { q: "ペアリング済みなのにBTキーボードが「未接続」と表示される。", a: "テレビのBluetoothがペアリングモードになっているか確認してください。テレビ側からペアリングを削除し、スマートフォンのBluetooth設定から再ペアリングしてみてください。" },
+      { q: "データはサーバーに送信されますか？", a: "いいえ。アプリはローカルネットワーク上でテレビと直接通信します。テレビデータは外部サーバーに送信されません。" },
+      { q: "複数のテレビを操作できますか？", a: "はい。各テレビを別々に追加します。ホーム画面のTVカードをタップしてテレビ間を切り替えます。" },
+    ],
+  },
+  ko: {
+    header_sub: "사용 설명서",
+    nav_quick: "🚀 빠른 시작", nav_add: "📺 TV 추가", nav_brands: "🔗 브랜드별",
+    nav_bt: "⌨️ BT 키보드", nav_fix: "🔧 연결 수정", nav_faq: "❓ FAQ",
+    qs_title: "빠른 시작", qs_badge: "5분",
+    qs_s1_t: "동일한 Wi-Fi 네트워크",
+    qs_s1_b: "스마트폰과 TV가 동일한 Wi-Fi 라우터에 연결되어 있는지 확인하세요. 이는 모든 Wi-Fi 제어 기능에 필요합니다.",
+    qs_s2_t: "TV에서 네트워크 리모컨 활성화",
+    qs_s2_b: "TV 설정으로 이동 → 정확한 단계는 아래의 브랜드별 섹션을 참조하세요.",
+    qs_s3_t: "앱 열기 → +를 탭하여 TV 추가",
+    qs_s3_b: "앱이 자동으로 네트워크를 스캔합니다. TV는 10~20초 내에 나타납니다. 탭하여 페어링을 시작합니다.",
+    qs_s4_t: "TV에서 페어링 요청 수락",
+    qs_s4_b: "TV 화면에 PIN 또는 수락 대화상자가 나타납니다. 앱에 PIN을 입력하거나 TV 리모컨의 확인을 눌러 수락합니다.",
+    qs_s5_t: "제어 시작!",
+    qs_s5_b: "준비가 완료되었습니다. 페어링 후 리모컨 화면이 자동으로 열립니다.",
+    qs_tip: "언제든지 홈 화면의 TV 카드를 탭하면 즉시 재연결됩니다.",
+    add_title: "TV 추가 화면",
+    add_s1_t: "자동 스캔 탭",
+    add_s1_b: "<strong>스캔</strong>을 탭하여 네트워크의 모든 TV를 자동으로 검색합니다. 지원되는 브랜드가 카드로 표시됩니다 — 탭하여 페어링을 시작합니다.",
+    add_s2_t: "수동 탭",
+    add_s2_b: "자동 스캔으로 TV를 찾지 못하면 <strong>수동</strong> 탭으로 전환하여 TV의 IP 주소를 직접 입력합니다. TV의 네트워크 설정 또는 라우터 관리 페이지에서 IP를 확인할 수 있습니다.",
+    add_s3_t: "TV가 표시되지 않나요?",
+    add_s3_b: "TV 설정에서 리모컨 제어가 활성화되어 있는지 확인하세요. 브랜드별 자세한 단계는 연결 수정 섹션을 참조하세요.",
+    add_info: "스캔은 네트워크 크기에 따라 10~30초가 걸립니다. 완료될 때까지 화면을 열어 두세요.",
+    br_title: "브랜드별 연결 가이드",
+    br_lg: "설정 → 모든 설정 → 일반 → 모바일 TV 켜기 → LG Connect 앱 켜기.<br><br>앱이 처음 연결되면 TV에 페어링 팝업이 나타납니다 — <strong>허용</strong>을 누릅니다.<br><br>포트: 3000(WebSocket)",
+    br_samsung: "설정 → 일반 → 외부 장치 관리자 → 장치 연결 관리자 → 액세스 알림 → 항상 허용.<br><br>첫 페어링 시 PIN 또는 수락 대화상자가 나타납니다.<br><br>포트: 8002(WebSocket)",
+    br_atv: "특별한 설정이 필요 없습니다 — Android TV 리모트 서비스가 자동으로 실행됩니다.<br><br>첫 연결 시 6자리 PIN이 화면에 나타납니다. 앱에 입력하세요.<br><br>포트: 6466",
+    br_panasonic: "<strong>최신 모델(Android TV):</strong> 위의 Android TV와 동일합니다.<br><br><strong>구형 Viera 모델:</strong> 네트워크 설정 → 네트워크 TV 제조사 설정 → TV 리모트 앱 설정 → 켜기. 포트: 55000(NRC).",
+    br_roku: "설정 → 시스템 → 고급 시스템 설정 → 외부 제어 → ECP 및 DIAL → 활성화.<br><br>페어링 불필요 — Roku는 개방형 ECP 프로토콜을 사용합니다.<br><br>포트: 8060",
+    br_warn: "일부 TV는 앱이 허용 장치 목록에 있어야 합니다. TV가 계속 연결을 거부하면 TV 설정의 신뢰할 수 있는 장치 목록을 확인하세요.",
+    bt_title: "블루투스 키보드 & 마우스",
+    bt_info: "이 기능은 Android 스마트폰을 블루투스 HID 키보드와 트랙패드로 변환합니다 — 비밀번호, URL 입력 또는 Wi-Fi 제어를 지원하지 않는 TV 제어에 유용합니다. Android 9(Pie) 이상이 필요합니다.",
+    bt_s1_t: "먼저 블루투스로 TV 페어링",
+    bt_s1_b: "스마트폰의 <strong>블루투스 설정</strong>으로 이동하여 TV와 페어링합니다(TV가 블루투스 장치로 표시되어야 합니다). TV는 일반적으로 모델명으로 표시됩니다.",
+    bt_s2_t: "앱에서 BT 키보드 & 마우스 열기",
+    bt_s2_b: "리모컨 화면에서 상단 바의 ⌨ 아이콘을 탭합니다. 또는 홈 화면의 키보드 아이콘을 탭합니다.",
+    bt_s3_t: "목록에서 TV 선택",
+    bt_s3_b: "화면에 페어링된 모든 블루투스 장치가 표시됩니다. TV를 탭하여 연결합니다. <strong>스캔</strong>을 탭하여 근처 장치를 검색할 수도 있습니다.",
+    bt_s4_t: "트랙패드 및 키보드 탭 사용",
+    bt_s4_b: "<strong>트랙패드:</strong> 드래그하여 커서 이동. 방향 버튼으로 D-pad 탐색.<br><strong>키보드:</strong> 텍스트를 직접 입력하고 Shift 및 특수 키를 사용합니다. 전송 또는 Enter를 탭하여 확인합니다.",
+    bt_warn: "iOS에서는 사용할 수 없습니다 — Apple은 iPhone에서 블루투스 HID 주변 장치 모드를 제한합니다. 대신 Wi-Fi 리모컨을 사용하세요.",
+    fix_title: "연결 문제 수정",
+    fix_s1_t: "동일한 네트워크 확인",
+    fix_s1_b: "스마트폰과 TV는 동일한 Wi-Fi 네트워크(동일한 SSID)에 있어야 합니다. 게스트 네트워크와 VPN은 장치를 서로 격리할 수 있습니다.",
+    fix_s2_t: "TV에서 리모컨 제어 활성화",
+    fix_s2_b: "브랜드마다 설정 경로가 다릅니다. 정확한 단계는 위의 브랜드별 섹션을 참조하세요. 옵션은 종종 \"리모트 장치\", \"모바일 TV 켜기\" 또는 \"외부 제어\"라고 합니다.",
+    fix_s3_t: "TV 재시작 후 다시 시도",
+    fix_s3_b: "TV를 완전히 끄고, 10초 기다린 후 다시 켭니다. 그런 다음 앱에서 다시 스캔합니다.",
+    fix_s4_t: "라우터 AP 격리 확인",
+    fix_s4_b: "일부 라우터에는 동일한 네트워크의 장치가 서로 통신하지 못하게 하는 \"AP 격리\" 또는 \"클라이언트 격리\" 기능이 있습니다. 라우터 설정에서 이를 비활성화하세요.",
+    fix_s5_t: "TV 삭제 후 다시 추가",
+    fix_s5_b: "홈 화면에서 TV 카드를 길게 누르기 → 삭제. 그런 다음 다시 추가합니다. 이렇게 하면 오래된 자격증명이 지워집니다.",
+    fix_s6_t: "블루투스 권한 부여(BT 키보드)",
+    fix_s6_b: "스마트폰 설정 → 앱 → SmartTV RC → 권한 → 주변 장치 → 허용.",
+    fix_tip: "TV가 이전에 발견되었지만 지금 오프라인으로 표시되면 TV 카드를 탭하여 재연결을 시도하세요 — 보통 2~3초 내에 재연결됩니다.",
+    faq_title: "자주 묻는 질문",
+    faqs: [
+      { q: "TV가 추가되었지만 항상 '연결 끊김'으로 표시됩니다.", a: "TV가 켜져 있고 동일한 네트워크에 있는지 확인하세요. 리모컨을 열면 앱이 자동으로 재연결됩니다 — TV 카드를 탭하기만 하면 됩니다." },
+      { q: "PIN을 입력했지만 오류가 발생했습니다.", a: "일부 TV는 PIN이 60초 후에 만료됩니다. 뒤로 가서 TV를 탭하여 새 페어링을 시작하고 빠르게 PIN을 입력하세요." },
+      { q: "TV가 켜져 있어도 스캔에서 아무것도 찾지 못합니다.", a: "수동 탭에서 TV IP를 직접 입력해 보세요. TV 설정에서 리모컨 제어가 활성화되어 있는지도 확인하세요." },
+      { q: "리모컨 버튼은 작동하지만 볼륨/전원이 반응하지 않습니다.", a: "볼륨과 전원은 IR 또는 해당 모델의 Wi-Fi에서 지원되지 않는 다른 프로토콜을 사용할 수 있습니다." },
+      { q: "페어링되었는데도 BT 키보드가 '미연결'로 표시됩니다.", a: "TV의 블루투스가 페어링 모드인지 확인하세요. TV 측에서 페어링을 삭제하고 스마트폰 블루투스 설정에서 다시 페어링해 보세요." },
+      { q: "제 데이터가 서버로 전송되나요?", a: "아니요. 앱은 로컬 네트워크에서 TV와 직접 통신합니다. TV 데이터는 외부 서버로 전송되지 않습니다." },
+      { q: "여러 TV를 제어할 수 있나요?", a: "네. 각 TV를 별도로 추가합니다. 홈 화면의 TV 카드를 탭하여 TV 사이를 전환합니다." },
+    ],
+  },
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent.trim() === {en:'EN',vi:'VI',zh:'中文',ja:'日本語',ko:'한국어'}[lang])
+  );
+  applyTranslations();
+  renderFaq();
+
+  // sync URL
+  const u = new URL(location.href);
+  u.searchParams.set('lang', lang);
+  history.replaceState(null, '', u.toString());
+}
+
+function applyTranslations() {
+  const d = T[currentLang] || T.en;
+  document.getElementById('header-sub').textContent = d.header_sub;
+  document.querySelectorAll('.i18n').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if (key && d[key] !== undefined) el.innerHTML = d[key];
+  });
+}
+
+function renderFaq() {
+  const d = T[currentLang] || T.en;
+  const container = document.getElementById('faq-list');
+  container.innerHTML = '';
+  (d.faqs || []).forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'faq-item';
+    div.innerHTML = `
+      <div class="faq-q">
+        <span>${item.q}</span>
+        <span class="faq-chevron" id="fchev-${i}">▼</span>
+      </div>
+      <div class="faq-a" id="faq-a-${i}">${item.a}</div>`;
+    div.querySelector('.faq-q').addEventListener('click', () => {
+      const ans = document.getElementById(`faq-a-${i}`);
+      const chev = document.getElementById(`fchev-${i}`);
+      ans.classList.toggle('open');
+      chev.classList.toggle('open');
+    });
+    container.appendChild(div);
+  });
+}
+
+// ── Accordion ─────────────────────────────────────────────────────────────────
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ── Screen-anchor scroll ──────────────────────────────────────────────────────
+function scrollToScreen(screen) {
+  const map = {
+    home: 'quick-start', addtv: 'add-tv', pairing: 'brands',
+    remote: 'quick-start', bthid: 'bt-hid',
+  };
+  const target = map[screen] || screen;
+  const el = document.getElementById(target);
+  if (!el) return;
+  // open the section first
+  const header = el.querySelector('.section-header');
+  const body = el.querySelector('.section-body');
+  if (header && body && !body.classList.contains('open')) {
+    header.classList.add('open');
+    body.classList.add('open');
+  }
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+(function init() {
+  const params = new URLSearchParams(location.search);
+  const lang = params.get('lang') || navigator.language.slice(0, 2);
+  const validLangs = Object.keys(T);
+  currentLang = validLangs.includes(lang) ? lang : 'en';
+
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent.trim() === {en:'EN',vi:'VI',zh:'中文',ja:'日本語',ko:'한국어'}[currentLang])
+  );
+  applyTranslations();
+  renderFaq();
+
+  const screen = params.get('screen');
+  if (screen) setTimeout(() => scrollToScreen(screen), 200);
+})();
+</script>
+</body>
+</html>
