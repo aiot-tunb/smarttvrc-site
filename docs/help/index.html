@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SmartTV RC – Help</title>
 <style>
+  /* ── Dark theme (default) ── */
   :root {
     --bg: #0f1117;
     --surface: #1a1d27;
     --surface2: #232636;
+    --border: #2d3152;
     --accent: #6c63ff;
     --accent2: #4fc3f7;
     --text: #e8eaf6;
@@ -16,9 +18,67 @@
     --success: #69f0ae;
     --warn: #ffd740;
     --danger: #ff5252;
+    --header-bg1: #1e1b4b;
+    --header-bg2: #0f1117;
+    --tip-bg: #0d2818; --tip-border: #69f0ae; --tip-text: #a7f3d0;
+    --warn-bg: #2a2000; --warn-border: #ffd740; --warn-text: #fde68a;
+    --info-bg: #0d1f36; --info-border: #4fc3f7; --info-text: #bae6fd;
     --radius: 12px;
     --radius-sm: 8px;
   }
+
+  /* ── Light theme ── */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --surface2: #f0f2f5;
+      --border: #d1d5db;
+      --accent: #4f63ff;
+      --accent2: #0284c7;
+      --text: #111827;
+      --text2: #6b7280;
+      --success: #15803d;
+      --warn: #b45309;
+      --danger: #dc2626;
+      --header-bg1: #ede9fe;
+      --header-bg2: #f5f7fa;
+      --tip-bg: #f0fdf4; --tip-border: #16a34a; --tip-text: #166534;
+      --warn-bg: #fffbeb; --warn-border: #d97706; --warn-text: #92400e;
+      --info-bg: #f0f9ff; --info-border: #0284c7; --info-text: #075985;
+    }
+  }
+  /* Explicit dark override (keep dark even on light-OS devices) */
+  :root[data-theme="dark"] {
+    --bg: #0f1117; --surface: #1a1d27; --surface2: #232636; --border: #2d3152;
+    --accent: #6c63ff; --accent2: #4fc3f7; --text: #e8eaf6; --text2: #9fa8c7;
+    --success: #69f0ae; --warn: #ffd740; --danger: #ff5252;
+    --header-bg1: #1e1b4b; --header-bg2: #0f1117;
+    --tip-bg: #0d2818; --tip-border: #69f0ae; --tip-text: #a7f3d0;
+    --warn-bg: #2a2000; --warn-border: #ffd740; --warn-text: #fde68a;
+    --info-bg: #0d1f36; --info-border: #4fc3f7; --info-text: #bae6fd;
+  }
+
+  /* Explicit light override via ?theme=light param */
+  :root[data-theme="light"] {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --surface2: #f0f2f5;
+    --border: #d1d5db;
+    --accent: #4f63ff;
+    --accent2: #0284c7;
+    --text: #111827;
+    --text2: #6b7280;
+    --success: #15803d;
+    --warn: #b45309;
+    --danger: #dc2626;
+    --header-bg1: #ede9fe;
+    --header-bg2: #f5f7fa;
+    --tip-bg: #f0fdf4; --tip-border: #16a34a; --tip-text: #166534;
+    --warn-bg: #fffbeb; --warn-border: #d97706; --warn-text: #92400e;
+    --info-bg: #f0f9ff; --info-border: #0284c7; --info-text: #075985;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -30,8 +90,8 @@
 
   /* ── Header ── */
   header {
-    background: linear-gradient(135deg, #1e1b4b 0%, #0f1117 60%);
-    border-bottom: 1px solid #2d3152;
+    background: linear-gradient(135deg, var(--header-bg1) 0%, var(--header-bg2) 60%);
+    border-bottom: 1px solid var(--border);
     padding: 20px 24px 16px;
     position: sticky; top: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -45,7 +105,7 @@
   /* ── Language picker ── */
   .lang-bar { display: flex; gap: 6px; flex-wrap: wrap; }
   .lang-btn {
-    padding: 5px 12px; border-radius: 20px; border: 1px solid #2d3152;
+    padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
     background: var(--surface); color: var(--text2);
     cursor: pointer; font-size: 0.8rem; transition: all 0.18s;
   }
@@ -65,7 +125,7 @@
     margin-bottom: 24px;
   }
   .toc a {
-    padding: 5px 14px; border-radius: 20px; border: 1px solid #2d3152;
+    padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
     background: var(--surface); color: var(--text2);
     text-decoration: none; font-size: 0.78rem; transition: all 0.18s;
     white-space: nowrap;
@@ -80,7 +140,7 @@
     padding: 16px 20px;
     background: var(--surface);
     border-radius: var(--radius);
-    border: 1px solid #2d3152;
+    border: 1px solid var(--border);
     transition: border-color 0.18s;
   }
   .section-header:hover { border-color: var(--accent); }
@@ -95,7 +155,7 @@
   .section-header.open .chevron { transform: rotate(180deg); }
 
   .section-body {
-    background: var(--surface); border: 1px solid #2d3152;
+    background: var(--surface); border: 1px solid var(--border);
     border-top: none; border-radius: 0 0 var(--radius) var(--radius);
     padding: 20px; display: none;
   }
@@ -111,7 +171,7 @@
   .step {
     position: relative; margin-bottom: 20px;
     background: var(--surface2); border-radius: var(--radius-sm);
-    padding: 14px 16px; border: 1px solid #2a2e48;
+    padding: 14px 16px; border: 1px solid var(--border);
   }
   .step::before {
     content: attr(data-n);
@@ -131,7 +191,7 @@
   .brand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
   .brand-card {
     background: var(--surface2); border-radius: var(--radius-sm);
-    border: 1px solid #2a2e48; padding: 14px 16px;
+    border: 1px solid var(--border); padding: 14px 16px;
   }
   .brand-card .brand-name {
     font-weight: 700; font-size: 0.9rem; margin-bottom: 6px;
@@ -145,7 +205,7 @@
 
   /* ── FAQ ── */
   .faq-item {
-    border-bottom: 1px solid #2a2e48; padding: 14px 0;
+    border-bottom: 1px solid var(--border); padding: 14px 0;
     cursor: pointer;
   }
   .faq-item:last-child { border-bottom: none; }
@@ -168,15 +228,15 @@
     font-size: 0.83rem; margin-top: 10px; line-height: 1.5;
     display: flex; gap: 8px; align-items: flex-start;
   }
-  .tip { background: #0d2818; border-left: 3px solid var(--success); color: #a7f3d0; }
-  .warn { background: #2a2000; border-left: 3px solid var(--warn); color: #fde68a; }
-  .info { background: #0d1f36; border-left: 3px solid var(--accent2); color: #bae6fd; }
+  .tip { background: var(--tip-bg); border-left: 3px solid var(--tip-border); color: var(--tip-text); }
+  .warn { background: var(--warn-bg); border-left: 3px solid var(--warn-border); color: var(--warn-text); }
+  .info { background: var(--info-bg); border-left: 3px solid var(--info-border); color: var(--info-text); }
   .tip::before { content: '✅'; flex-shrink: 0; }
   .warn::before { content: '⚠️'; flex-shrink: 0; }
   .info::before { content: 'ℹ️'; flex-shrink: 0; }
 
   kbd {
-    display: inline-block; background: #2a2e48; border: 1px solid #4a4e70;
+    display: inline-block; background: var(--surface2); border: 1px solid var(--border);
     border-radius: 4px; padding: 1px 6px; font-size: 0.78rem;
     font-family: monospace; color: var(--text);
   }
@@ -882,6 +942,13 @@ function scrollToScreen(screen) {
 // ── Boot ──────────────────────────────────────────────────────────────────────
 (function init() {
   const params = new URLSearchParams(location.search);
+
+  // Apply theme from URL param so it matches the host app's theme
+  const theme = params.get('theme');
+  if (theme === 'light' || theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
   const lang = params.get('lang') || navigator.language.slice(0, 2);
   const validLangs = Object.keys(T);
   currentLang = validLangs.includes(lang) ? lang : 'en';
