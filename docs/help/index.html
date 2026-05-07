@@ -920,13 +920,18 @@ function toggle(header) {
 }
 
 // ── Scroll with sticky-header offset ─────────────────────────────────────────
-const STICKY_H = 130; // header (~69px) + nav-pills (~61px)
+function getStickyH() {
+  const hdr = document.querySelector('header');
+  const toc = document.querySelector('.toc');
+  return (hdr ? hdr.offsetHeight : 69) + (toc ? toc.offsetHeight : 57) + 12;
+}
 
 function scrollToEl(el, delay) {
   setTimeout(() => {
-    const top = el.getBoundingClientRect().top + window.scrollY - STICKY_H;
+    const stickyH = getStickyH();
+    const top = el.getBoundingClientRect().top + window.scrollY - stickyH;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-  }, delay || 80);
+  }, delay || 120);
 }
 
 // ── Screen-anchor scroll ──────────────────────────────────────────────────────
@@ -972,9 +977,9 @@ function scrollToScreen(screen) {
 
   if (anchor && anchor.startsWith('error_')) {
     const code = anchor.slice(6);
-    setTimeout(() => scrollToError(code), 250);
+    setTimeout(() => scrollToError(code), 350);
   } else if (screen) {
-    setTimeout(() => scrollToScreen(screen), 200);
+    setTimeout(() => scrollToScreen(screen), 300);
   } else {
     // No screen param → open Quick Start by default
     const qs = document.getElementById('quick-start');
