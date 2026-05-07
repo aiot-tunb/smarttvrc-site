@@ -287,13 +287,13 @@
 
   <!-- ══ QUICK START ══ -->
   <div class="section" id="quick-start">
-    <div class="section-header open" onclick="toggle(this)">
+    <div class="section-header" onclick="toggle(this)">
       <span class="section-icon">🚀</span>
       <span class="section-title i18n" data-key="qs_title">Quick Start</span>
       <span class="section-badge i18n" data-key="qs_badge">5 min</span>
       <span class="chevron">▼</span>
     </div>
-    <div class="section-body open">
+    <div class="section-body">
       <div class="thread">
         <div class="step" data-n="1">
           <div class="step-title i18n" data-key="qs_s1_t">Same Wi-Fi network</div>
@@ -905,10 +905,9 @@ function scrollToError(errorCode) {
     item.style.transition = 'background 0.3s';
     item.style.background = 'rgba(108,99,255,0.15)';
     setTimeout(() => { item.style.background = ''; }, 1500);
-    setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'center' }), 80);
+    scrollToEl(item, 80);
   } else {
-    // No matching FAQ — scroll to FAQ section top
-    if (faqSection) setTimeout(() => faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+    if (faqSection) scrollToEl(faqSection, 80);
   }
 }
 
@@ -920,6 +919,16 @@ function toggle(header) {
   body.classList.toggle('open', !isOpen);
 }
 
+// ── Scroll with sticky-header offset ─────────────────────────────────────────
+const STICKY_H = 130; // header (~69px) + nav-pills (~61px)
+
+function scrollToEl(el, delay) {
+  setTimeout(() => {
+    const top = el.getBoundingClientRect().top + window.scrollY - STICKY_H;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }, delay || 80);
+}
+
 // ── Screen-anchor scroll ──────────────────────────────────────────────────────
 function scrollToScreen(screen) {
   const map = {
@@ -929,14 +938,13 @@ function scrollToScreen(screen) {
   const target = map[screen] || screen;
   const el = document.getElementById(target);
   if (!el) return;
-  // open the section first
   const header = el.querySelector('.section-header');
   const body = el.querySelector('.section-body');
   if (header && body && !body.classList.contains('open')) {
     header.classList.add('open');
     body.classList.add('open');
   }
-  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  scrollToEl(el, 80);
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -963,11 +971,17 @@ function scrollToScreen(screen) {
   const anchor = params.get('anchor'); // e.g. error_pairing_pin
 
   if (anchor && anchor.startsWith('error_')) {
-    // Deep-link to specific FAQ item
-    const code = anchor.slice(6); // strip 'error_'
+    const code = anchor.slice(6);
     setTimeout(() => scrollToError(code), 250);
   } else if (screen) {
     setTimeout(() => scrollToScreen(screen), 200);
+  } else {
+    // No screen param → open Quick Start by default
+    const qs = document.getElementById('quick-start');
+    if (qs) {
+      qs.querySelector('.section-header').classList.add('open');
+      qs.querySelector('.section-body').classList.add('open');
+    }
   }
 })();
 </script>
